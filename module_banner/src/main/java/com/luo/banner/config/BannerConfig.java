@@ -1,5 +1,6 @@
 package com.luo.banner.config;
 
+
 import com.luo.banner.util.BannerUtils;
 
 public class BannerConfig {

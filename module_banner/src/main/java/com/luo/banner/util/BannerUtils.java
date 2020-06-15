@@ -1,13 +1,17 @@
 package com.luo.banner.util;
 
 import android.content.res.Resources;
+import android.graphics.Outline;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 public class BannerUtils {
 
@@ -55,5 +59,22 @@ public class BannerUtils {
 
     public static float dp2px(float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
+    }
+
+    /**
+     * 设置view圆角
+     *
+     * @param radius
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static void setBannerRound(View view,float radius) {
+        view.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), radius);
+            }
+        });
+        view.setClipToOutline(true);
     }
 }

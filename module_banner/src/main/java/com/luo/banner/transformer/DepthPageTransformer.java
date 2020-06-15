@@ -2,14 +2,16 @@ package com.luo.banner.transformer;
 
 import android.view.View;
 
-import androidx.viewpager2.widget.ViewPager2;
+public class DepthPageTransformer extends BasePageTransformer {
+    private static final float DEFAULT_MIN_SCALE = 0.75f;
+    private float mMinScale = DEFAULT_MIN_SCALE;
 
-/**
- * 层叠渐变效果.
- * copy from: https://developer.android.com/training/animation/screen-slide-2
- */
-public class DepthPageTransformer implements ViewPager2.PageTransformer {
-    private static final float MIN_SCALE = 0.75f;
+    public DepthPageTransformer() {
+    }
+
+    public DepthPageTransformer(float minScale) {
+        this.mMinScale = minScale;
+    }
 
     public void transformPage(View view, float position) {
         int pageWidth = view.getWidth();
@@ -26,6 +28,8 @@ public class DepthPageTransformer implements ViewPager2.PageTransformer {
             view.setScaleY(1f);
 
         } else if (position <= 1) { // (0,1]
+            //进入页面时
+            view.setVisibility(View.VISIBLE);
             // Fade the page out.
             view.setAlpha(1 - position);
 
@@ -33,10 +37,14 @@ public class DepthPageTransformer implements ViewPager2.PageTransformer {
             view.setTranslationX(pageWidth * -position);
 
             // Scale the page down (between MIN_SCALE and 1)
-            float scaleFactor = MIN_SCALE
-                    + (1 - MIN_SCALE) * (1 - Math.abs(position));
+            float scaleFactor = mMinScale
+                    + (1 - mMinScale) * (1 - Math.abs(position));
             view.setScaleX(scaleFactor);
             view.setScaleY(scaleFactor);
+            //退出页面时
+            if(position ==1){
+                view.setVisibility(View.INVISIBLE);
+            }
 
         } else { // (1,+Infinity]
             // This page is way off-screen to the right.
